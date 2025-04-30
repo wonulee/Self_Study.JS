@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<body>
+    <input readonly id="operator">
+    <input readonly type="number" id="result" >
+    <div class="row">
+        <button id="num7">7</button>
+        <button id="num8">8</button>
+        <button id="num9">9</button>
+        <button id="plus">+</button>
+    </div>
+    <div class="row">
+        <button id="num4">4</button>
+        <button id="num5">5</button>
+        <button id="num6">6</button>
+        <button id="minus">-</button>
+    </div>
+    <div class="row">
+        <button id="num1">1</button>
+        <button id="num2">2</button>
+        <button id="num3">3</button>
+        <button id="div">/</button>
+    </div>
+    <div class="row">
+        <button id="clear">C</button>
+        <button id="num0">0</button>
+        <button id="equl">=</button>
+        <button id="mul">X</button>
+    </div>
+    <script>
+        let numOne = '';
+        let operator = '';
+        let numTwo = '';
+        let cal;
+        const $operator = document.querySelector('#operator');
+        const $result = document.querySelector('#result');
+        function onClickNumber(number) {
+            if (operator) {
+                numTwo += number;
+            } else {
+                numOne += number;
+            }
+            $result.value += number;
+        };
+        
+        function onClickOperator(opr) {
+            operator = opr;
+            $operator.value = opr;
+            $result.value = '';
+        }
+
+        document.querySelector('#num0').addEventListener('click', () => onClickNumber('0'));
+        document.querySelector('#num1').addEventListener('click', () => onClickNumber('1'));
+        document.querySelector('#num2').addEventListener('click', () => onClickNumber('2'));
+        document.querySelector('#num3').addEventListener('click', () => onClickNumber('3'));
+        document.querySelector('#num4').addEventListener('click', () => onClickNumber('4'));
+        document.querySelector('#num5').addEventListener('click', () => onClickNumber('5'));
+        document.querySelector('#num6').addEventListener('click', () => onClickNumber('6'));
+        document.querySelector('#num7').addEventListener('click', () => onClickNumber('7'));
+        document.querySelector('#num8').addEventListener('click', () => onClickNumber('8'));
+        document.querySelector('#num9').addEventListener('click', () => onClickNumber('9'));
+
+        document.querySelector('#plus').addEventListener('click', () =>
+        onClickOperator('+'));
+        document.querySelector('#minus').addEventListener('click', () => 
+        onClickOperator('-'));
+        document.querySelector('#div').addEventListener('click', () =>
+        onClickOperator('/'));
+        document.querySelector('#mul').addEventListener('click', () => 
+        onClickOperator('x'));
+        document.querySelector('#equl').addEventListener('click', () => {
+            switch(operator) {
+                case '+':
+                    cal= parseInt(numOne) + parseInt(numTwo);
+                    break;
+
+                case '-':
+                    cal= parseInt(numOne) - parseInt(numTwo);
+                    break;
+
+                case '/':
+                    cal= parseInt(numOne)/ parseInt(numTwo);
+                    break;
+
+                case 'x':
+                    cal= parseInt(numOne) * parseInt(numTwo);
+                    break;
+
+                default :
+                    cal = 'Error'
+            }
+            $result.value = cal;
+            numOne = '';
+            numTwo = '';
+            operator = '';
+            $operator.value = '';
+        });
+        document.querySelector('#clear').addEventListener('click', () => {
+            numOne = '';
+            numTwo = '';
+            operator = '';
+            cal = '';
+            $result.value = '';
+            $operator.value = '';
+        });
+    </script>
+</body>
+</html>
