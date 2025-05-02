@@ -7,51 +7,84 @@
 </head>
 <body>
     <form id="form">
-        <input type="text" id="input">
+        <input type="text" id="input" maxlength="4" placeholder="숫자 4자리 입력">
         <button>확인</button>
     </form>
     <div id="logs"></div>
 
     <script>
-        const $input = document.querySelector('#input');
-        const $form = document.querySelector('#form');
+        const $input = document.querySelector('#input'); 
+        //input태그
+        const $form = document.querySelector('#form'); 
+        //form 태그
         const $logs = document.querySelector('#logs');
+        //logs 태그그
+        const tries = [];
 
-        const numbers = []; //number = [1,2,3,4,5,6,7,8,9]
-        for (let n =0; n< 9; n++) {
-            number.push(n+1);
-        }
-        const answer = []; //4자리수 만들기
-        for (let n=0; n< 4; n++) { //4번 반복
-            const index =  Math.floor(Math.random()*(numbers.length)); //index = [0,1,2,3,4,5,6,7,8]  그리고 numbers의 index는 줄어들고 answer의 index는 늘어난다.
-            answer.push(numbers[index]); //4자리
-            numbers.splice(index,1); //numbers에서 랜덤으로 나온 숫자 빼기(중복되지 않게 하기위해서)
+        // 1부터 9까지 배열 생성
+        const numbers = []; 
+        for (let n = 0; n < 9; n++) { //number = [1,2,3,4,5,6,7,8,9]
+            numbers.push(n + 1);
         }
 
+        // 중복 없이 4자리 정답 생성
+        const answer = [];
+        for (let n = 0; n < 4; n++) {
+            const index = Math.floor(Math.random() * numbers.length); //index = [1,2,3,4]
+            answer.push(numbers[index]); //answer = [numbers에서 뽑은은 4자리 숫자 psuh]
+            numbers.splice(index, 1); //numbers에서 뽑힌 숫자 제외
+        }
+        console.log('정답:', answer);
+
+        // 입력 검사 함수
         function checkInput(input) {
-            if (input.length !==4 ) { //길이가 4인가
-                return alert('4자리 숫자를 입력해주세요.');
+            if (input.length !== 4) { // 4자리 숫자로 만들었는가
+                alert('4자리 숫자를 입력해주세요.');
+                return false;
             }
-            if (new Set(input).size !== 4) { //중복되지 않는가
-                return alert('중복되지 않게 입력해주세요.');
+            if (new Set(input).size !== 4) { //4자리가 중복된 숫자를 가지고 있는가
+                alert('숫자가 중복되지 않게 입력해주세요.');
+                return false;
             }
-            if (tires.include(input)) { //이미 시도한 값인가
-                return alert('이미 시도한 값입니다.');
+            if (tries.includes(input)) { // 이전에 시도했던 숫자인가
+                alert('이미 시도한 값입니다.');
+                return false;
             }
-            return true; //입력한 숫자를 검사하는 코드
+            return true;
         }
 
-        $form.addEventListener('submit',(event) => {
-            event.preventDefault(); //submit 눌러도 새로고침 안됨
-            $input.value ='';
-            if (checkInput(value)) {
-                //입력값 문제없음
-            } else {
-                //입력값 문제 있음
-            };
-        })
-        
+        // 이벤트 리스너
+        $form.addEventListener('submit', (event) => {
+            event.preventDefault(); //submit을 눌러도 새로고침하지 않음음
+            const value = $input.value;
+            $input.value = '';
 
+            if (!checkInput(value)) return;
+            tries.push(value);
+
+            let strike = 0;
+            let ball = 0;
+
+            for (let i = 0; i < 4; i++) {
+                if (Number(value[i]) === answer[i]) {
+                    strike++;
+                } else if (answer.includes(Number(value[i]))) {
+                    ball++;
+                }
+            }
+
+            $logs.innerHTML += `${value}: ${strike} 스트라이크 ${ball} 볼<br>`;
+
+            if (strike === 4) {
+                $logs.innerHTML += `<strong>🎉 홈런! 정답은 ${answer.join('')}입니다.</strong>`; //join 사용하는 이유: [4, 7, 1, 9] 배열을 4719 문자열로 바꿀 수 있음.
+                    
+            }
+
+            if (tries.length >= 10 && strike < 4) {
+                $logs.innerHTML += `<strong>💀 실패! 정답은 ${answer.join('')}입니다.</strong>`;
+                $input.disabled = true;
+            }
+        });
     </script>
 </body>
 </html>
