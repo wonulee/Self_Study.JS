@@ -1,7 +1,7 @@
 class Mydate:
     def __init__(self, year=1, month=1, day=1): #기본값 1년 1월 1일 
         self.year = int(year) #1보다 작은 정수이면 1년으로 셋팅
-        if self.year < 1:
+        if self.year < 1: 
             self.year = 1
             
         self.month = int(month) #12보다 큰 정수 이면 12월로 셋팅, 1보다 작은 정수이면 1월로 셋팅
